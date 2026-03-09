@@ -1,0 +1,340 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    text-align: center;
+    color: #667eea;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    color: #667eea;
+    margin-bottom: 15px;
+}
+
+/* 控制面板 */
+.controls {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+.control-group label {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: 600;
+    color: #555;
+}
+
+.control-group input[type="number"] {
+    width: 80px;
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+}
+
+.control-group input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* 按鈕樣式 */
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5568d3;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background: #138496;
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-warning:hover {
+    background: #e0a800;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.mode-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.mode-btn:hover {
+    background: #5a6268;
+}
+
+.mode-btn.active {
+    background: #667eea;
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+/* 資訊面板 */
+.info-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 5px;
+    border-left: 4px solid #667eea;
+}
+
+.info-panel p {
+    margin: 5px 0;
+    font-weight: 600;
+    color: #555;
+}
+
+/* 圖例 */
+.legend {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.legend-box {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #333;
+    border-radius: 5px;
+}
+
+/* 網格容器 */
+.grid-container {
+    display: grid;
+    gap: 5px;
+    padding: 20px;
+    background: #e9ecef;
+    border-radius: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* 單元格樣式 */
+.cell {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 單元格狀態顏色 */
+.cell.start {
+    background: #28a745;
+}
+
+.cell.end {
+    background: #dc3545;
+}
+
+.cell.obstacle {
+    background: #6c757d;
+}
+
+.normal-cell {
+    background: white;
+}
+
+.start-cell {
+    background: #28a745;
+}
+
+.end-cell {
+    background: #dc3545;
+}
+
+.obstacle-cell {
+    background: #6c757d;
+}
+
+/* 箭頭顯示 */
+.arrow {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    display: none;
+}
+
+.cell.start .arrow,
+.cell.end .arrow {
+    color: white;
+}
+
+.cell.obstacle .arrow {
+    display: none !important;
+}
+
+/* 價值顯示 */
+.value {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 5px;
+    border-radius: 3px;
+    display: none;
+    white-space: nowrap;
+}
+
+.cell.start .value,
+.cell.end .value {
+    color: #333;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.cell.obstacle .value {
+    display: none !important;
+}
+
+/* 使用說明 */
+.instructions {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.instructions ol {
+    margin-left: 20px;
+}
+
+.instructions li {
+    margin: 10px 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .cell {
+        width: 60px;
+        height: 60px;
+    }
+
+    .arrow {
+        font-size: 18px;
+    }
+
+    .value {
+        font-size: 10px;
+    }
+
+    .mode-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
