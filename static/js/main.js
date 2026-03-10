@@ -334,10 +334,15 @@ async function resetGrid() {
 
 // 更新資訊顯示
 function updateInfo() {
-    obstacleCount.textContent = `障礙物數量: ${currentObstacles} / ${maxObstacles}`;
+    obstacleCount.textContent = `障礙物數量： ${currentObstacles} / ${maxObstacles}`;
 }
 
 // 更新狀態資訊
 function updateStatus(message) {
-    statusInfo.textContent = `狀態: ${message}`;
+    statusInfo.textContent = `狀態：${message}`;
 }
+
+// 頁面載入時自動初始化 5x5 網格
+window.addEventListener('DOMContentLoaded', () => {
+    initializeGrid();
+});

@@ -1,63 +1,62 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>網格地圖 - 深度強化學習 HW1</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
     <div class="container">
         <h1>網格地圖 - 深度強化學習 HW1</h1>
 
         <div class="controls">
             <div class="control-group">
-                <label for="gridSize">網格大小 (n):</label>
+                <label for="gridSize">網格大小 (n)：</label>
                 <input type="number" id="gridSize" min="5" max="9" value="5">
                 <button id="initBtn" class="btn btn-primary">初始化網格</button>
             </div>
 
             <div class="control-group">
-                <label>設置模式:</label>
+                <label>設置模式：</label>
                 <div class="mode-buttons">
-                    <button id="startModeBtn" class="btn mode-btn">設置起點 (綠色)</button>
-                    <button id="endModeBtn" class="btn mode-btn">設置終點 (紅色)</button>
-                    <button id="obstacleModeBtn" class="btn mode-btn">設置障礙物 (灰色)</button>
+                    <button id="startModeBtn" class="btn mode-btn">設置起點</button>
+                    <button id="endModeBtn" class="btn mode-btn">設置終點</button>
+                    <button id="obstacleModeBtn" class="btn mode-btn">設置障礙物</button>
                     <button id="eraseModeBtn" class="btn mode-btn">清除障礙物</button>
+                    <button id="generatePolicyBtn" class="btn btn-success">生成隨機策略</button>
+                    <button id="evaluatePolicyBtn" class="btn btn-info">評估策略 (計算 V(s))</button>
+                    <button id="resetBtn" class="btn btn-warning">重置所有</button>
                 </div>
-            </div>
-
-            <div class="control-group">
-                <button id="generatePolicyBtn" class="btn btn-success">生成隨機策略</button>
-                <button id="evaluatePolicyBtn" class="btn btn-info">評估策略 (計算 V(s))</button>
-                <button id="resetBtn" class="btn btn-warning">重置所有</button>
             </div>
 
             <div class="info-panel">
-                <p id="modeInfo">當前模式: 未選擇</p>
-                <p id="obstacleCount">障礙物數量: 0 / 0</p>
-                <p id="statusInfo">狀態: 請初始化網格</p>
+                <p id="modeInfo">當前模式：未選擇</p>
+                <p id="obstacleCount">障礙物數量：0 / 0</p>
+                <p id="statusInfo">狀態：請初始化網格</p>
             </div>
-        </div>
 
-        <div class="legend">
-            <h3>圖例說明</h3>
-            <div class="legend-items">
-                <div class="legend-item">
-                    <div class="legend-box start-cell"></div>
-                    <span>起點 (綠色)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box end-cell"></div>
-                    <span>終點 (紅色)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box obstacle-cell"></div>
-                    <span>障礙物 (灰色)</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-box normal-cell"></div>
-                    <span>空白單元格</span>
+            <div class="legend">
+                <h3>圖例說明</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-box start-cell"></div>
+                        <span>起點</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box end-cell"></div>
+                        <span>終點</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box obstacle-cell"></div>
+                        <span>障礙物</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box normal-cell"></div>
+                        <span>空白單元格</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,4 +80,5 @@
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

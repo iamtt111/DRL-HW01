@@ -5,41 +5,50 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #869ac7 0%, #1e1b4b 50%, #0f172a 100%);
     min-height: 100vh;
     padding: 20px;
-    color: #333;
+    color: #e2e8f0;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background: white;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.1);
 }
 
 h1 {
     text-align: center;
-    color: #667eea;
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: 30px;
-    font-size: 2.5em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 2.2em;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 h3 {
-    color: #667eea;
+    color: #6237e1;
     margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
 }
 
 /* 控制面板 */
 .controls {
     margin-bottom: 30px;
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .control-group {
@@ -49,75 +58,96 @@ h3 {
 .control-group label {
     display: inline-block;
     margin-right: 10px;
-    font-weight: 600;
-    color: #555;
+    font-weight: 500;
+    color: #1e293b;
+    font-size: 0.95em;
 }
 
 .control-group input[type="number"] {
     width: 80px;
     padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 5px;
+    background: white;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 6px;
     font-size: 1em;
-    transition: border-color 0.3s;
+    color: #1e293b;
+    transition: all 0.2s;
 }
 
 .control-group input[type="number"]:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #8b5cf6;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 /* 按鈕樣式 */
 .btn {
     padding: 10px 20px;
     margin: 5px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1em;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 6px;
+    font-size: 0.95em;
     cursor: pointer;
-    transition: all 0.3s;
-    font-weight: 600;
+    transition: all 0.2s;
+    font-weight: 500;
+    background: white;
+    color: #475569;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(139, 92, 246, 0.1);
+    border-color: #8b5cf6;
+    transform: translateY(-1px);
+    color: #1e293b;
 }
 
 .btn-primary {
-    background: #667eea;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-color: transparent;
     color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
 }
 
 .btn-primary:hover {
-    background: #5568d3;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    transform: translateY(-2px);
 }
 
 .btn-success {
-    background: #28a745;
-    color: white;
+    background: white;
+    border-color: rgba(34, 197, 94, 0.5);
+    color: #475569;
 }
 
 .btn-success:hover {
-    background: #218838;
+    background: rgba(34, 197, 94, 0.1);
+    border-color: #22c55e;
+    color: #15803d;
 }
 
 .btn-info {
-    background: #17a2b8;
-    color: white;
+    background: white;
+    border-color: rgba(59, 130, 246, 0.5);
+    color: #475569;
 }
 
 .btn-info:hover {
-    background: #138496;
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #1e40af;
 }
 
 .btn-warning {
-    background: #ffc107;
-    color: #333;
+    background: white;
+    border-color: rgba(251, 146, 60, 0.5);
+    color: #475569;
 }
 
 .btn-warning:hover {
-    background: #e0a800;
+    background: rgba(251, 146, 60, 0.1);
+    border-color: #fb923c;
+    color: #c2410c;
 }
 
 .mode-buttons {
@@ -128,40 +158,47 @@ h3 {
 }
 
 .mode-btn {
-    background: #6c757d;
-    color: white;
+    background: white;
+    border-color: rgba(139, 92, 246, 0.3);
+    color: #475569;
 }
 
 .mode-btn:hover {
-    background: #5a6268;
+    background: rgba(139, 92, 246, 0.1);
+    border-color: #8b5cf6;
+    color: #1e293b;
 }
 
 .mode-btn.active {
-    background: #667eea;
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
 }
 
 /* 資訊面板 */
 .info-panel {
     margin-top: 20px;
     padding: 15px;
-    background: white;
-    border-radius: 5px;
-    border-left: 4px solid #667eea;
+    background: rgba(249, 250, 251, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.6);
 }
 
 .info-panel p {
     margin: 5px 0;
-    font-weight: 600;
-    color: #555;
+    font-weight: 400;
+    color: #475569;
+    font-size: 0.95em;
 }
 
 /* 圖例 */
 .legend {
-    margin-bottom: 20px;
+    margin-top: 20px;
     padding: 15px;
-    background: #f8f9fa;
-    border-radius: 10px;
+    background: rgba(249, 250, 251, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.6);
 }
 
 .legend-items {
@@ -176,33 +213,40 @@ h3 {
     gap: 10px;
 }
 
+.legend-item span {
+    color: #475569;
+    font-size: 0.95em;
+}
+
 .legend-box {
     width: 30px;
     height: 30px;
-    border: 2px solid #333;
-    border-radius: 5px;
+    border: 2px solid rgba(139, 92, 246, 0.6);
+    border-radius: 6px;
 }
 
 /* 網格容器 */
 .grid-container {
     display: grid;
-    gap: 5px;
+    gap: 6px;
     padding: 20px;
-    background: #e9ecef;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
     justify-content: center;
-    margin-bottom: 30px;
+    margin: 0 auto 30px auto;
+    width: fit-content;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 /* 單元格樣式 */
 .cell {
     width: 80px;
     height: 80px;
-    background: white;
-    border: 2px solid #333;
-    border-radius: 5px;
+    background: #faf8f3;
+    border: 2px solid rgba(139, 92, 246, 0.6);
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
     position: relative;
     display: flex;
     align-items: center;
@@ -210,37 +254,47 @@ h3 {
 }
 
 .cell:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-color: #8b5cf6;
+    background: #f5f3ed;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
 }
 
 /* 單元格狀態顏色 */
 .cell.start {
-    background: #28a745;
+    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    border: 2px solid #10b981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
 }
 
 .cell.end {
-    background: #dc3545;
+    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    border: 2px solid #ef4444;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
 }
 
 .cell.obstacle {
-    background: #6c757d;
+    background: rgba(71, 85, 105, 0.6);
+    border: 2px solid #475569;
 }
 
 .normal-cell {
-    background: white;
+    background: #faf8f3;
+    border: 2px solid rgba(139, 92, 246, 0.6);
 }
 
 .start-cell {
-    background: #28a745;
+    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    border: 2px solid #10b981;
 }
 
 .end-cell {
-    background: #dc3545;
+    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+    border: 2px solid #ef4444;
 }
 
 .obstacle-cell {
-    background: #6c757d;
+    background: rgba(71, 85, 105, 0.6);
+    border: 2px solid #475569;
 }
 
 /* 箭頭顯示 */
@@ -251,13 +305,18 @@ h3 {
     transform: translateX(-50%);
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #374151;
     display: none;
 }
 
 .cell.start .arrow,
 .cell.end .arrow {
     color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.cell.obstacle .arrow {
+    color: #cbd5e1;
 }
 
 .cell.obstacle .arrow {
@@ -270,20 +329,22 @@ h3 {
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 12px;
-    font-weight: bold;
-    color: #333;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 5px;
-    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(139, 92, 246, 0.3);
     display: none;
     white-space: nowrap;
 }
 
 .cell.start .value,
 .cell.end .value {
-    color: #333;
-    background: rgba(255, 255, 255, 0.95);
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .cell.obstacle .value {
@@ -293,8 +354,9 @@ h3 {
 /* 使用說明 */
 .instructions {
     padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
 }
 
 .instructions ol {
@@ -303,8 +365,9 @@ h3 {
 
 .instructions li {
     margin: 10px 0;
-    color: #555;
+    color: #475569;
     line-height: 1.6;
+    font-size: 0.95em;
 }
 
 /* 響應式設計 */
