@@ -1,4 +1,150 @@
+// GridWorld 類 - 純前端實現
+class GridWorld {
+    constructor(n) {
+        this.n = n;
+        this.grid = Array(n).fill(null).map(() => Array(n).fill(0));
+        this.start = null;
+        this.end = null;
+        this.obstacles = [];
+        this.policy = {};
+        this.values = {};
+    }
+
+    setStart(row, col) {
+        this.start = { row, col };
+    }
+
+    setEnd(row, col) {
+        this.end = { row, col };
+    }
+
+    addObstacle(row, col) {
+        if (this.obstacles.length < this.n - 2) {
+            this.obstacles.push({ row, col });
+            return true;
+        }
+        return false;
+    }
+
+    removeObstacle(row, col) {
+        const index = this.obstacles.findIndex(obs => obs.row === row && obs.col === col);
+        if (index !== -1) {
+            this.obstacles.splice(index, 1);
+            return true;
+        }
+        return false;
+    }
+
+    isObstacle(row, col) {
+        return this.obstacles.some(obs => obs.row === row && obs.col === col);
+    }
+
+    generateRandomPolicy() {
+        const actions = ['up', 'down', 'left', 'right'];
+        this.policy = {};
+
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                const isEnd = this.end && this.end.row === i && this.end.col === j;
+                const isObstacle = this.isObstacle(i, j);
+
+                if (!isEnd && !isObstacle) {
+                    const randomIndex = Math.floor(Math.random() * actions.length);
+                    this.policy[`${i},${j}`] = actions[randomIndex];
+                }
+            }
+        }
+
+        return this.policy;
+    }
+
+    getNextState(row, col, action) {
+        let nextRow = row;
+        let nextCol = col;
+
+        if (action === 'up') {
+            nextRow = Math.max(0, row - 1);
+        } else if (action === 'down') {
+            nextRow = Math.min(this.n - 1, row + 1);
+        } else if (action === 'left') {
+            nextCol = Math.max(0, col - 1);
+        } else if (action === 'right') {
+            nextCol = Math.min(this.n - 1, col + 1);
+        }
+
+        // 如果下一個狀態是障礙物，則停留在原地
+        if (this.isObstacle(nextRow, nextCol)) {
+            return { row, col };
+        }
+
+        return { row: nextRow, col: nextCol };
+    }
+
+    policyEvaluation(gamma = 0.9, theta = 0.01, maxIterations = 1000) {
+        // 初始化價值函數
+        const V = {};
+        for (let i = 0; i < this.n; i++) {
+            for (let j = 0; j < this.n; j++) {
+                V[`${i},${j}`] = 0.0;
+            }
+        }
+
+        // 迭代更新價值函數
+        for (let iteration = 0; iteration < maxIterations; iteration++) {
+            let delta = 0;
+
+            for (let i = 0; i < this.n; i++) {
+                for (let j = 0; j < this.n; j++) {
+                    const stateKey = `${i},${j}`;
+
+                    // 跳過終點和障礙物
+                    const isEnd = this.end && this.end.row === i && this.end.col === j;
+                    const isObstacle = this.isObstacle(i, j);
+
+                    if (isEnd || isObstacle) {
+                        continue;
+                    }
+
+                    const v = V[stateKey];
+
+                    // 獲取當前狀態的行動
+                    if (this.policy[stateKey]) {
+                        const action = this.policy[stateKey];
+                        const nextState = this.getNextState(i, j, action);
+                        const nextStateKey = `${nextState.row},${nextState.col}`;
+
+                        // 獎勵設置：到達終點 +10，其他 -1
+                        const isNextEnd = this.end &&
+                            this.end.row === nextState.row &&
+                            this.end.col === nextState.col;
+                        const reward = isNextEnd ? 10 : -1;
+
+                        // Bellman 更新方程
+                        V[stateKey] = reward + gamma * V[nextStateKey];
+                    }
+
+                    delta = Math.max(delta, Math.abs(v - V[stateKey]));
+                }
+            }
+
+            // 如果變化很小，則收斂
+            if (delta < theta) {
+                break;
+            }
+        }
+
+        // 四捨五入到小數點後兩位
+        for (let key in V) {
+            V[key] = Math.round(V[key] * 100) / 100;
+        }
+
+        this.values = V;
+        return V;
+    }
+}
+
 // 全局變量
+let gridWorld = null;
 let gridSize = 5;
 let currentMode = null;
 let maxObstacles = 0;
@@ -34,7 +180,7 @@ evaluatePolicyBtn.addEventListener('click', evaluatePolicy);
 resetBtn.addEventListener('click', resetGrid);
 
 // 初始化網格
-async function initializeGrid() {
+function initializeGrid() {
     const n = parseInt(gridSizeInput.value);
 
     if (n < 5 || n > 9) {
@@ -42,36 +188,18 @@ async function initializeGrid() {
         return;
     }
 
-    try {
-        const response = await fetch('/initialize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ n: n }),
-        });
+    gridWorld = new GridWorld(n);
+    gridSize = n;
+    maxObstacles = n - 2;
+    currentObstacles = 0;
+    hasStart = false;
+    hasEnd = false;
+    policy = null;
+    values = null;
 
-        const data = await response.json();
-
-        if (data.success) {
-            gridSize = n;
-            maxObstacles = n - 2;
-            currentObstacles = 0;
-            hasStart = false;
-            hasEnd = false;
-            policy = null;
-            values = null;
-
-            createGridUI();
-            updateInfo();
-            updateStatus('網格已初始化，請設置起點和終點');
-        } else {
-            alert('初始化失敗: ' + data.error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('初始化失敗');
-    }
+    createGridUI();
+    updateInfo();
+    updateStatus('網格已初始化，請設置起點和終點');
 }
 
 // 創建網格 UI
@@ -103,99 +231,80 @@ function createGridUI() {
 }
 
 // 處理單元格點擊
-async function handleCellClick(row, col, cell) {
+function handleCellClick(row, col, cell) {
     if (!currentMode) {
         alert('請先選擇設置模式');
         return;
     }
 
-    try {
-        if (currentMode === 'start') {
-            // 移除之前的起點
-            document.querySelectorAll('.cell.start').forEach(c => c.classList.remove('start'));
+    if (!gridWorld) {
+        alert('請先初始化網格');
+        return;
+    }
 
-            const response = await fetch('/set_cell', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ type: 'start', row: row, col: col }),
-            });
+    if (currentMode === 'start') {
+        // 移除之前的起點
+        document.querySelectorAll('.cell.start').forEach(c => c.classList.remove('start'));
 
-            const data = await response.json();
-            if (data.success) {
-                cell.classList.add('start');
-                cell.classList.remove('end', 'obstacle');
-                hasStart = true;
-                updateStatus('起點已設置');
-            }
-        } else if (currentMode === 'end') {
-            // 移除之前的終點
-            document.querySelectorAll('.cell.end').forEach(c => c.classList.remove('end'));
+        gridWorld.setStart(row, col);
+        cell.classList.add('start');
+        cell.classList.remove('end', 'obstacle');
 
-            const response = await fetch('/set_cell', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ type: 'end', row: row, col: col }),
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                cell.classList.add('end');
-                cell.classList.remove('start', 'obstacle');
-                hasEnd = true;
-                updateStatus('終點已設置');
-            }
-        } else if (currentMode === 'obstacle') {
-            if (cell.classList.contains('obstacle')) {
-                return;
-            }
-
-            const response = await fetch('/set_cell', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ type: 'obstacle', row: row, col: col }),
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                cell.classList.add('obstacle');
-                cell.classList.remove('start', 'end');
-                currentObstacles++;
-                updateInfo();
-                updateStatus(`障礙物已添加 (${currentObstacles}/${maxObstacles})`);
-            } else {
-                alert(data.error);
-            }
-        } else if (currentMode === 'erase') {
-            if (cell.classList.contains('obstacle')) {
-                const response = await fetch('/set_cell', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ type: 'remove_obstacle', row: row, col: col }),
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    cell.classList.remove('obstacle');
-                    currentObstacles--;
-                    updateInfo();
-                    updateStatus('障礙物已清除');
-                }
-            }
+        // 如果之前是障礙物，更新計數
+        if (gridWorld.isObstacle(row, col)) {
+            gridWorld.removeObstacle(row, col);
+            currentObstacles--;
         }
 
-        updateInfo();
-    } catch (error) {
-        console.error('Error:', error);
-        alert('操作失敗');
+        hasStart = true;
+        updateStatus('起點已設置');
+    } else if (currentMode === 'end') {
+        // 移除之前的終點
+        document.querySelectorAll('.cell.end').forEach(c => c.classList.remove('end'));
+
+        gridWorld.setEnd(row, col);
+        cell.classList.add('end');
+        cell.classList.remove('start', 'obstacle');
+
+        // 如果之前是障礙物，更新計數
+        if (gridWorld.isObstacle(row, col)) {
+            gridWorld.removeObstacle(row, col);
+            currentObstacles--;
+        }
+
+        hasEnd = true;
+        updateStatus('終點已設置');
+    } else if (currentMode === 'obstacle') {
+        if (cell.classList.contains('obstacle')) {
+            return;
+        }
+
+        // 不能在起點或終點設置障礙物
+        if (cell.classList.contains('start') || cell.classList.contains('end')) {
+            alert('不能在起點或終點設置障礙物');
+            return;
+        }
+
+        const success = gridWorld.addObstacle(row, col);
+        if (success) {
+            cell.classList.add('obstacle');
+            currentObstacles++;
+            updateInfo();
+            updateStatus(`障礙物已添加 (${currentObstacles}/${maxObstacles})`);
+        } else {
+            alert(`最多只能設置 ${maxObstacles} 個障礙物`);
+        }
+    } else if (currentMode === 'erase') {
+        if (cell.classList.contains('obstacle')) {
+            gridWorld.removeObstacle(row, col);
+            cell.classList.remove('obstacle');
+            currentObstacles--;
+            updateInfo();
+            updateStatus('障礙物已清除');
+        }
     }
+
+    updateInfo();
 }
 
 // 設置模式
@@ -222,37 +331,30 @@ function setMode(mode) {
 }
 
 // 生成隨機策略
-async function generatePolicy() {
+function generatePolicy() {
     if (!hasStart || !hasEnd) {
         alert('請先設置起點和終點');
         return;
     }
 
-    try {
-        const response = await fetch('/generate_policy', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            policy = data.policy;
-            displayPolicy();
-            updateStatus('隨機策略已生成');
-        } else {
-            alert('生成策略失敗: ' + data.error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('生成策略失敗');
+    if (!gridWorld) {
+        alert('請先初始化網格');
+        return;
     }
+
+    policy = gridWorld.generateRandomPolicy();
+    displayPolicy();
+    updateStatus('隨機策略已生成');
 }
 
 // 顯示策略
 function displayPolicy() {
+    // 先清除所有箭頭
+    document.querySelectorAll('.arrow').forEach(arrow => {
+        arrow.textContent = '';
+        arrow.style.display = 'none';
+    });
+
     for (let key in policy) {
         const [row, col] = key.split(',').map(Number);
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
@@ -279,42 +381,35 @@ function getArrow(action) {
 }
 
 // 評估策略
-async function evaluatePolicy() {
+function evaluatePolicy() {
     if (!policy) {
         alert('請先生成策略');
         return;
     }
 
-    try {
-        const response = await fetch('/evaluate_policy', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            values = data.values;
-            displayValues();
-            updateStatus('策略評估完成，已顯示 V(s)');
-        } else {
-            alert('評估策略失敗: ' + data.error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('評估策略失敗');
+    if (!gridWorld) {
+        alert('請先初始化網格');
+        return;
     }
+
+    values = gridWorld.policyEvaluation();
+    displayValues();
+    updateStatus('策略評估完成，已顯示 V(s)');
 }
 
 // 顯示價值函數
 function displayValues() {
+    // 先清除所有價值顯示
+    document.querySelectorAll('.value').forEach(v => {
+        v.textContent = '';
+        v.style.display = 'none';
+    });
+
     for (let key in values) {
         const [row, col] = key.split(',').map(Number);
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 
-        if (cell) {
+        if (cell && !cell.classList.contains('obstacle')) {
             const valueDisplay = cell.querySelector('.value');
             valueDisplay.textContent = `V: ${values[key]}`;
             valueDisplay.style.display = 'block';
@@ -323,9 +418,9 @@ function displayValues() {
 }
 
 // 重置網格
-async function resetGrid() {
+function resetGrid() {
     if (confirm('確定要重置所有設置嗎？')) {
-        await initializeGrid();
+        initializeGrid();
         currentMode = null;
         document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
         modeInfo.textContent = '當前模式: 未選擇';

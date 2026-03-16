@@ -1,6 +1,10 @@
 # 深度強化學習 HW1 - 網格地圖與策略評估
 
-這是一個使用 Flask 建立的互動式網格地圖應用程式，用於展示強化學習中的策略評估。
+這是一個互動式網格地圖應用程式，用於展示強化學習中的策略評估。純前端實現，可直接部署於 GitHub Pages。
+
+## 線上展示
+
+GitHub Pages: https://[your-username].github.io/[repo-name]/
 
 ## 功能特色
 
@@ -19,41 +23,37 @@
 
 ```
 hw01/
-├── app.py                 # Flask 主應用程式
-├── templates/
-│   └── index.html         # 前端 HTML 頁面
+├── index.html             # 主頁面
 ├── static/
 │   ├── css/
 │   │   └── style.css      # CSS 樣式檔
 │   └── js/
-│       └── main.js        # JavaScript 邏輯
-├── requirements.txt       # Python 依賴套件
+│       └── main.js        # JavaScript 邏輯 (含 GridWorld 類)
 └── README.md              # 說明文件
 ```
 
-## 安裝步驟
+## 部署到 GitHub Pages
 
-1. 安裝所需套件：
+### 方法一：直接部署（推薦）
+
+1. 將專案推送到 GitHub：
 ```bash
-pip install -r requirements.txt
+git add .
+git commit -m "Initial commit"
+git push origin main
 ```
 
-或手動安裝：
-```bash
-pip install Flask numpy
-```
+2. 在 GitHub 倉庫設定：
+   - 進入 `Settings` → `Pages`
+   - Source 選擇 `Deploy from a branch`
+   - Branch 選擇 `main`，資料夾選擇 `/ (root)`
+   - 點擊 `Save`
 
-## 執行方式
+3. 等待幾分鐘，即可透過 `https://[username].github.io/[repo-name]/` 訪問
 
-1. 啟動 Flask 應用程式：
-```bash
-python app.py
-```
+### 方法二：本地測試
 
-2. 開啟瀏覽器，訪問：
-```
-http://localhost:5000
-```
+直接用瀏覽器開啟 `index.html` 即可本地測試。
 
 ## 使用說明
 
@@ -62,15 +62,15 @@ http://localhost:5000
    - 點擊「初始化網格」按鈕
 
 2. **設置起點**
-   - 點擊「設置起點（綠色）」按鈕
+   - 點擊「設置起點」按鈕
    - 在網格上點擊要設為起點的單元格
 
 3. **設置終點**
-   - 點擊「設置終點（紅色）」按鈕
+   - 點擊「設置終點」按鈕
    - 在網格上點擊要設為終點的單元格
 
 4. **設置障礙物**
-   - 點擊「設置障礙物（灰色）」按鈕
+   - 點擊「設置障礙物」按鈕
    - 在網格上點擊要設為障礙物的單元格（最多 n-2 個）
 
 5. **生成隨機策略**
@@ -125,12 +125,12 @@ V(s) = R(s,a,s') + γ * V(s')
 ## 作業評分標準
 
 ### HW1-1 網格地圖開發（60%）
-- ✅ 網格地圖功能完整性：30%
-- ✅ 使用者界面友好性：15%
-- ✅ 程式碼結構與可讀性：10%
-- ✅ 網頁操作流暢度：5%
+- 網格地圖功能完整性：30%
+- 使用者界面友好性：15%
+- 程式碼結構與可讀性：10%
+- 網頁操作流暢度：5%
 
 ### HW1-2 策略顯示與價值評估（40%）
-- ✅ 隨機生成行動顯示功能：20%
-- ✅ 策略評估的正確性：15%
-- ✅ 程式碼結構與可讀性：5%
+- 隨機生成行動顯示功能：20%
+- 策略評估的正確性：15%
+- 程式碼結構與可讀性：5%
