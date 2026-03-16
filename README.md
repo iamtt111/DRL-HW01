@@ -1,10 +1,10 @@
 # 深度強化學習 HW1 - 網格地圖與策略評估
 
-這是一個互動式網格地圖應用程式，用於展示強化學習中的策略評估。純前端實現，可直接部署於 GitHub Pages。
+這是一個互動式網格地圖應用程式，用於展示強化學習中的策略評估與 Value Iteration。
 
-## 線上展示
+## Live Demo
 
-GitHub Pages: https://[your-username].github.io/[repo-name]/
+https://iamtt111.github.io/DRL-HW01/
 
 ## 功能特色
 
@@ -19,6 +19,16 @@ GitHub Pages: https://[your-username].github.io/[repo-name]/
 - 使用策略評估演算法計算每個狀態的價值函數 V(s)
 - 視覺化顯示策略和價值函數
 
+### HW1-3: Value Iteration 與最優策略
+- 實現 Value Iteration 演算法，搜尋最優策略 π*(s)
+- 動畫化展示迭代過程，每次迭代顯示：
+  - 當前價值函數 V(s)
+  - 當前策略箭頭
+  - 路徑動畫（Agent 從起點走向終點）
+- 顯示迭代次數、Delta 值、路徑長度
+- 可調整動畫速度，支援中途停止
+- 收斂後可播放最優路徑動畫
+
 ## 專案結構
 
 ```
@@ -31,29 +41,6 @@ hw01/
 │       └── main.js        # JavaScript 邏輯 (含 GridWorld 類)
 └── README.md              # 說明文件
 ```
-
-## 部署到 GitHub Pages
-
-### 方法一：直接部署（推薦）
-
-1. 將專案推送到 GitHub：
-```bash
-git add .
-git commit -m "Initial commit"
-git push origin main
-```
-
-2. 在 GitHub 倉庫設定：
-   - 進入 `Settings` → `Pages`
-   - Source 選擇 `Deploy from a branch`
-   - Branch 選擇 `main`，資料夾選擇 `/ (root)`
-   - 點擊 `Save`
-
-3. 等待幾分鐘，即可透過 `https://[username].github.io/[repo-name]/` 訪問
-
-### 方法二：本地測試
-
-直接用瀏覽器開啟 `index.html` 即可本地測試。
 
 ## 使用說明
 
@@ -83,12 +70,25 @@ git push origin main
    - 系統會使用 Bellman 方程計算每個狀態的價值函數
    - 價值會顯示在單元格下方
 
-7. **重置**
+7. **Value Iteration（HW1-3）**
+   - 確保已設置起點和終點
+   - 點擊「Value Iteration」按鈕
+   - 觀看動畫：每次迭代會顯示當前策略和路徑動畫
+   - 可使用速度滑桿調整動畫快慢
+   - 可點擊「停止動畫」中斷執行
+   - 收斂後顯示最優策略和路徑
+
+8. **播放路徑動畫**
+   - 執行 Value Iteration 後可用
+   - 點擊「播放路徑動畫」按鈕
+   - 觀看 Agent 沿最優路徑從起點走到終點
+
+9. **重置**
    - 點擊「重置所有」按鈕可以清空所有設置
 
 ## 技術細節
 
-### 策略評估演算法
+### 策略評估演算法（HW1-2）
 
 使用迭代策略評估（Iterative Policy Evaluation）：
 
@@ -101,6 +101,28 @@ V(s) = R(s,a,s') + γ * V(s')
 - `R(s,a,s')` 是即時獎勵（到達終點 +10，其他 -1）
 - `γ` 是折扣因子（預設 0.9）
 - `s'` 是下一個狀態
+
+### Value Iteration 演算法（HW1-3）
+
+使用 Bellman 最優方程進行迭代：
+
+```
+V(s) = max_a [R(s,a,s') + γ * V(s')]
+```
+
+演算法流程：
+1. 初始化所有狀態的價值 V(s) = 0
+2. 重複迭代直到收斂（delta < θ）：
+   - 對每個狀態 s，計算所有動作的價值，取最大值更新 V(s)
+3. 從收斂的 V* 提取最優策略：
+   ```
+   π*(s) = argmax_a [R(s,a,s') + γ * V*(s')]
+   ```
+
+參數設定：
+- γ (gamma) = 0.9
+- θ (theta) = 0.01
+- 最大迭代次數 = 1000
 
 ### 獎勵設置
 
@@ -121,16 +143,5 @@ V(s) = R(s,a,s') + γ * V(s')
 - 網格邊界會阻止 agent 移出範圍
 - 障礙物會阻止 agent 進入該單元格
 - 策略評估會持續迭代直到收斂（delta < 0.01）
-
-## 作業評分標準
-
-### HW1-1 網格地圖開發（60%）
-- 網格地圖功能完整性：30%
-- 使用者界面友好性：15%
-- 程式碼結構與可讀性：10%
-- 網頁操作流暢度：5%
-
-### HW1-2 策略顯示與價值評估（40%）
-- 隨機生成行動顯示功能：20%
-- 策略評估的正確性：15%
-- 程式碼結構與可讀性：5%
+- Value Iteration 動畫過程中可隨時停止
+- 初期迭代時路徑可能不完整（無法到達終點），隨著迭代進行會逐漸改善

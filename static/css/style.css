@@ -150,6 +150,149 @@ h3 {
     color: #c2410c;
 }
 
+/* Value Iteration 按鈕 */
+.btn-vi {
+    background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.btn-vi:hover {
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* 播放動畫按鈕 */
+.btn-animate {
+    background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.btn-animate:hover {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+    transform: translateY(-2px);
+    color: white;
+}
+
+/* 停止按鈕 */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-danger:disabled {
+    background: #9ca3af;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Value Iteration 控制面板 */
+.vi-control-panel {
+    margin-top: 20px;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.speed-control label {
+    font-weight: 500;
+    color: #1e293b;
+    font-size: 0.95em;
+}
+
+.speed-control input[type="range"] {
+    width: 120px;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(90deg, #c4b5fd 0%, #8b5cf6 100%);
+    border-radius: 3px;
+    outline: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(139, 92, 246, 0.4);
+    transition: transform 0.2s;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.speed-control span {
+    font-weight: 600;
+    color: #8b5cf6;
+    min-width: 40px;
+}
+
+.iteration-display {
+    flex: 1;
+    text-align: right;
+}
+
+.iteration-display p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.95em;
+}
+
+.iteration-display strong {
+    color: #8b5cf6;
+    font-size: 1.1em;
+}
+
+.converged-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-left: 10px;
+    animation: badgePulse 1s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.8);
+    }
+}
+
 .mode-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -349,6 +492,68 @@ h3 {
 
 .cell.obstacle .value {
     display: none !important;
+}
+
+/* Agent 當前位置動畫 */
+.cell.agent-current {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    border: 3px solid #f59e0b !important;
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.8),
+        0 0 50px rgba(251, 191, 36, 0.4);
+    animation: pulse 0.5s ease-in-out infinite;
+    z-index: 10;
+}
+
+/* 已訪問路徑 */
+.cell.path-visited {
+    background: rgba(251, 191, 36, 0.3) !important;
+    border: 2px solid rgba(251, 191, 36, 0.6) !important;
+}
+
+/* 保持起點終點樣式不被覆蓋 */
+.cell.start.path-visited {
+    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%) !important;
+    border: 2px solid #10b981 !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+}
+
+.cell.end.path-visited {
+    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%) !important;
+    border: 2px solid #ef4444 !important;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+/* 脈動動畫 */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* 價值更新閃爍動畫 */
+@keyframes valueUpdate {
+    0% {
+        background: rgba(139, 92, 246, 0.3);
+    }
+    100% {
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
+
+.cell.value-updating {
+    animation: cellUpdate 0.3s ease-out;
+}
+
+@keyframes cellUpdate {
+    0% {
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+    }
+    100% {
+        box-shadow: none;
+    }
 }
 
 /* 使用說明 */

@@ -28,7 +28,21 @@
                     <button id="eraseModeBtn" class="btn mode-btn">清除障礙物</button>
                     <button id="generatePolicyBtn" class="btn btn-success">生成隨機策略</button>
                     <button id="evaluatePolicyBtn" class="btn btn-info">評估策略 (計算 V(s))</button>
+                    <button id="valueIterationBtn" class="btn btn-vi">Value Iteration</button>
+                    <button id="stopViBtn" class="btn btn-danger" disabled>停止動畫</button>
+                    <button id="animatePathBtn" class="btn btn-animate">播放路徑動畫</button>
                     <button id="resetBtn" class="btn btn-warning">重置所有</button>
+                </div>
+            </div>
+
+            <div class="vi-control-panel">
+                <div class="speed-control">
+                    <label for="viSpeedSlider">動畫速度：</label>
+                    <input type="range" id="viSpeedSlider" min="10" max="100" value="50">
+                    <span id="viSpeedValue">50%</span>
+                </div>
+                <div class="iteration-display">
+                    <p id="iterationInfo">迭代次數: <strong>0</strong> | Delta: <strong>-</strong></p>
                 </div>
             </div>
 
