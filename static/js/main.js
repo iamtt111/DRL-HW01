@@ -458,8 +458,7 @@ const startModeBtn = document.getElementById('startModeBtn');
 const endModeBtn = document.getElementById('endModeBtn');
 const obstacleModeBtn = document.getElementById('obstacleModeBtn');
 const eraseModeBtn = document.getElementById('eraseModeBtn');
-const generatePolicyBtn = document.getElementById('generatePolicyBtn');
-const evaluatePolicyBtn = document.getElementById('evaluatePolicyBtn');
+const randomPolicyBtn = document.getElementById('randomPolicyBtn');
 const resetBtn = document.getElementById('resetBtn');
 const valueIterationBtn = document.getElementById('valueIterationBtn');
 const animatePathBtn = document.getElementById('animatePathBtn');
@@ -477,8 +476,7 @@ startModeBtn.addEventListener('click', () => setMode('start'));
 endModeBtn.addEventListener('click', () => setMode('end'));
 obstacleModeBtn.addEventListener('click', () => setMode('obstacle'));
 eraseModeBtn.addEventListener('click', () => setMode('erase'));
-generatePolicyBtn.addEventListener('click', generatePolicy);
-evaluatePolicyBtn.addEventListener('click', evaluatePolicy);
+randomPolicyBtn.addEventListener('click', generateAndEvaluatePolicy);
 resetBtn.addEventListener('click', resetGrid);
 valueIterationBtn.addEventListener('click', runValueIteration);
 animatePathBtn.addEventListener('click', animateOptimalPath);
@@ -640,17 +638,25 @@ function setMode(mode) {
 function generatePolicy() {
     if (!hasStart || !hasEnd) {
         alert('請先設置起點和終點');
-        return;
+        return false;
     }
 
     if (!gridWorld) {
         alert('請先初始化網格');
-        return;
+        return false;
     }
 
     policy = gridWorld.generateRandomPolicy();
     displayPolicy();
-    updateStatus('隨機策略已生成');
+    return true;
+}
+
+function generateAndEvaluatePolicy() {
+    if (generatePolicy()) {
+        values = gridWorld.policyEvaluation();
+        displayValues();
+        updateStatus('隨機策略已生成並評估完成');
+    }
 }
 
 // 顯示策略
