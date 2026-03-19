@@ -4,131 +4,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>網格地圖 - 深度強化學習 HW1</title>
+    <title>GridWorld - 深度強化學習 HW1</title>
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>網格地圖 - 深度強化學習 HW1</h1>
+        <h1>GridWorld - 深度強化學習 HW1</h1>
 
-        <div class="main-layout">
-            <!-- 左側：說明與資訊 -->
-            <div class="left-panel">
-                <!-- 使用說明 -->
-                <div class="instructions">
-                    <h3>使用說明</h3>
-                    <ol>
-                        <li>選擇網格大小，點擊「初始化」</li>
-                        <li>設置起點、終點與障礙物</li>
-                        <li>生成隨機策略或執行 Value Iteration</li>
-                        <li>評估策略查看 V(s) 值</li>
-                        <li>播放路徑動畫觀察結果</li>
-                    </ol>
+        <!-- 頂部控制區 -->
+        <div class="top-controls">
+            <div class="control-group">
+                <label for="gridSize">網格大小：</label>
+                <input type="number" id="gridSize" min="5" max="9" value="5">
+                <button id="initBtn" class="btn btn-primary">初始化</button>
+                <button id="resetBtn" class="btn btn-warning">重置</button>
+            </div>
+            <div class="control-group">
+                <label>手動模式：</label>
+                <div class="mode-buttons">
+                    <button id="startModeBtn" class="btn mode-btn">起點</button>
+                    <button id="endModeBtn" class="btn mode-btn">終點</button>
+                    <button id="obstacleModeBtn" class="btn mode-btn">障礙物</button>
+                    <button id="eraseModeBtn" class="btn mode-btn">清除</button>
                 </div>
+            </div>
+            <div class="control-group">
+                <label>動畫速度：</label>
+                <input type="range" id="speedSlider" min="10" max="100" value="50">
+                <span id="speedValue">50%</span>
+            </div>
+            <div class="status-group">
+                <p id="modeInfo">模式：未選擇</p>
+                <p id="obstacleCount">障礙物：0 / 0</p>
+                <p id="statusInfo">請初始化網格</p>
+            </div>
+        </div>
 
-                <!-- 圖例 -->
-                <div class="legend">
-                    <h3>圖例</h3>
-                    <div class="legend-items">
-                        <div class="legend-item">
-                            <div class="legend-box start-cell"></div>
-                            <span>起點</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-box end-cell"></div>
-                            <span>終點</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-box obstacle-cell"></div>
-                            <span>障礙物</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-box normal-cell"></div>
-                            <span>空白</span>
-                        </div>
-                    </div>
+        <!-- 三個 GridWorld 區域 -->
+        <div class="grids-layout">
+            <!-- 原始網格（設定用） -->
+            <div class="grid-section">
+                <div class="grid-header">
+                    <h3>原始網格</h3>
+                    <p class="grid-subtitle">依序點擊: 起點 → 終點 → 障礙物</p>
                 </div>
-
-                <!-- 狀態資訊 -->
-                <div class="info-panel">
-                    <h3>狀態</h3>
-                    <p id="modeInfo">模式：未選擇</p>
-                    <p id="obstacleCount">障礙物：0 / 0</p>
-                    <p id="statusInfo">請初始化網格</p>
+                <div id="gridContainer" class="grid-container">
+                    <!-- 網格將由 JavaScript 動態生成 -->
                 </div>
             </div>
 
-            <!-- 中間：控制面板 -->
-            <div class="center-panel">
-                <!-- Step 1: 設置環境 -->
-                <div class="step-section">
-                    <div class="step-header">
-                        <span class="step-number">1</span>
-                        <span class="step-title">設置環境</span>
+            <!-- Policy Iteration (HW1-2) -->
+            <div class="grid-section">
+                <div class="grid-header">
+                    <h3>Policy Iteration</h3>
+                    <p class="grid-subtitle">策略迭代</p>
+                </div>
+                <div class="algorithm-controls">
+                    <button id="policyIterationBtn" class="btn btn-pi">Policy Iteration</button>
+                    <button id="stopPiBtn" class="btn btn-danger" disabled>停止</button>
+                </div>
+                <div class="iteration-display">
+                    <p id="piIterationInfo">迭代: <strong>0</strong> | 階段: <strong>-</strong></p>
+                </div>
+                <div id="piGridContainer" class="grid-container result-grid empty">
+                    <div class="empty-grid-message">請先設定網格並執行演算法</div>
+                </div>
+            </div>
+
+            <!-- Value Iteration (HW1-3) -->
+            <div class="grid-section">
+                <div class="grid-header">
+                    <h3>Value Iteration</h3>
+                    <p class="grid-subtitle">價值迭代</p>
+                </div>
+                <div class="algorithm-controls">
+                    <button id="valueIterationBtn" class="btn btn-vi">Value Iteration</button>
+                    <button id="stopViBtn" class="btn btn-danger" disabled>停止</button>
+                </div>
+                <div class="iteration-display">
+                    <p id="viIterationInfo">迭代: <strong>0</strong> | Δ: <strong>-</strong></p>
+                </div>
+                <div id="viGridContainer" class="grid-container result-grid empty">
+                    <div class="empty-grid-message">請先設定網格並執行演算法</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 圖例說明 -->
+        <div class="bottom-info">
+            <div class="legend">
+                <h4>圖例</h4>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-box start-cell"></div>
+                        <span>起點 (R=0)</span>
                     </div>
-                    <div class="step-content">
-                        <div class="grid-size-control">
-                            <label for="gridSize">網格大小：</label>
-                            <input type="number" id="gridSize" min="5" max="9" value="5">
-                            <button id="initBtn" class="btn btn-primary">初始化</button>
+                    <div class="legend-item">
+                        <div class="legend-box end-cell"></div>
+                        <span>終點 (R=+10)</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box obstacle-cell"></div>
+                        <span>障礙物</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box normal-cell"></div>
+                        <span>空白 (R=-1)</span>
+                    </div>
+                </div>
+                <div class="legend-notation">
+                    <p><strong>V(s)</strong>：狀態價值函數，表示從狀態 s 開始的期望累積獎勵</p>
+                    <p><strong>π(s)</strong>：策略，表示在狀態 s 應採取的動作 (↑↓←→)</p>
+                </div>
+            </div>
+            <div class="algorithm-info">
+                <h4>演算法說明</h4>
+                <div class="info-columns">
+                    <div class="info-col">
+                        <strong>Policy Iteration:</strong>
+                        <div class="algo-step">
+                            <span class="step-label">1. 初始化隨機策略 π</span>
                         </div>
-                        <div class="mode-section">
-                            <label>編輯模式：</label>
-                            <div class="mode-buttons">
-                                <button id="startModeBtn" class="btn mode-btn">起點</button>
-                                <button id="endModeBtn" class="btn mode-btn">終點</button>
-                                <button id="obstacleModeBtn" class="btn mode-btn">障礙物</button>
-                                <button id="eraseModeBtn" class="btn mode-btn">清除</button>
+                        <div class="algo-step">
+                            <span class="step-label">2. Policy Evaluation：評估當前策略</span>
+                            <div class="formula">V(s) ← Σ<sub>a</sub> π(a|s) Σ<sub>s',r</sub> p(s',r|s,a)[r + γV(s')]
+                            </div>
+                        </div>
+                        <div class="algo-step">
+                            <span class="step-label">3. Policy Improvement：改進策略</span>
+                            <div class="formula">π(s) ← argmax<sub>a</sub> Σ<sub>s',r</sub> p(s',r|s,a)[r + γV(s')]
+                            </div>
+                        </div>
+                        <div class="algo-step">
+                            <span class="step-label">4. 重複 2-3 直到 π 收斂</span>
+                        </div>
+                    </div>
+                    <div class="info-col">
+                        <strong>Value Iteration:</strong>
+                        <div class="algo-step">
+                            <span class="step-label">1. 初始化 V(s) = 0, ∀s</span>
+                        </div>
+                        <div class="algo-step">
+                            <span class="step-label">2. 對每個狀態取最佳價值動作，Bellman Update</span>
+                            <div class="formula">V(s) ← max<sub>a</sub> Σ<sub>s',r</sub> p(s',r|s,a)[r + γV(s')]</div>
+                        </div>
+                        <div class="algo-step">
+                            <span class="step-label">3. 重複直到 V(s) 收斂 (Δ < θ)</span>
+                        </div>
+                        <div class="algo-step">
+                            <span class="step-label">4. 從 V(s) 提取策略</span>
+                            <div class="formula">π(s) ← argmax<sub>a</sub> Σ<sub>s',r</sub> p(s',r|s,a)[r + γV(s')]
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Step 2: 執行算法 -->
-                <div class="step-section">
-                    <div class="step-header">
-                        <span class="step-number">2</span>
-                        <span class="step-title">執行算法</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="algorithm-buttons">
-                            <button id="randomPolicyBtn" class="btn btn-success">隨機策略 + 評估</button>
-                            <button id="valueIterationBtn" class="btn btn-vi">Value Iteration</button>
-                        </div>
-                        <div class="iteration-display">
-                            <p id="iterationInfo">迭代: <strong>0</strong> | Δ: <strong>-</strong></p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 3: 視覺化 -->
-                <div class="step-section">
-                    <div class="step-header">
-                        <span class="step-number">3</span>
-                        <span class="step-title">視覺化</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="animation-buttons">
-                            <button id="animatePathBtn" class="btn btn-animate">播放路徑</button>
-                            <button id="stopViBtn" class="btn btn-danger" disabled>停止</button>
-                        </div>
-                        <div class="speed-control">
-                            <label for="viSpeedSlider">速度：</label>
-                            <input type="range" id="viSpeedSlider" min="10" max="100" value="50">
-                            <span id="viSpeedValue">50%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 重置按鈕 -->
-                <button id="resetBtn" class="btn btn-warning btn-reset">重置所有</button>
-            </div>
-
-            <!-- 右側：Grid -->
-            <div class="right-panel">
-                <div id="gridContainer" class="grid-container">
-                    <!-- 網格將由 JavaScript 動態生成 -->
+                <div class="formula-note">
+                    <p><strong>參數：</strong> γ = 0.9 (折扣因子) | θ = 0.01 (收斂閾值)</p>
+                    <p><strong>符號：</strong> π(a|s) = 策略機率 | p(s',r|s,a) = 狀態轉移機率 | 本環境為確定性 (p=1)</p>
                 </div>
             </div>
         </div>
